@@ -1,0 +1,73 @@
+﻿@using ContosoUniversity;
+@model PaginatedList<ContosoUniversity.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Элементы</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["GradeSortParm"]"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Последнее имя</a>
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CourseSortParm"]"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Дата поступления на работу</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["StudentsSortParm"]"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]">Дата поступления на работу</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course.CourseID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.ID)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EnrollmentID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.EnrollmentID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.EnrollmentID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Прошлый
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Следующий
+</a>

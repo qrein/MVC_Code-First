@@ -1,0 +1,76 @@
+﻿@using ContosoUniversity;
+@model PaginatedList<ContosoUniversity.Models.Course>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Курсы</h1>
+
+<p>
+    <a asp-action="Create">Добавить новый курс </a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+           Имя : <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Искать" class="btn btn-default" />
+            <a asp-action="Index">Назад к полному списку </a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Заголовок </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CreditSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Кредиты</a>
+
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Credits)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CourseID"> Изменить</a> |
+                    <a asp-action="Details" asp-route-id="@item.CourseID">Детали</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CourseID">Удалить </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Предыдущий
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Следующий
+</a>
+
